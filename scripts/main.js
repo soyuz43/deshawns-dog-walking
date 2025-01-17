@@ -1,8 +1,9 @@
+// main.js
 import { Walkers } from "./Walkers.js"
 import { CityList } from "./CityList.js"
 import { Assignments } from "./Assignments.js"
 import { RegisteredPets } from "./RegisteredPets.js"
-import { getWalkers, getPets } from "./database.js"
+import { getWalkers, getPets, getCityById } from "./database.js"
 
 const walkers = getWalkers()
 const pets = getPets()
@@ -34,7 +35,6 @@ const applicationHTML = `
 
 mainContainer.innerHTML = applicationHTML
 
-// ! Helper func to parse multiple pets
 const concatenatePetNames = (petsArray) => {
     if (petsArray.length === 1) {
         return petsArray[0]
@@ -59,7 +59,9 @@ mainContainer.addEventListener("click", (event) => {
                 ? `is walking ${concatenatePetNames(petNames)}`
                 : "is not walking anyone"
 
-            window.alert(`${walker.name} ${petsMessage} in ${walker.city}`)
+            const city = getCityById(walker.cityId).name
+
+            window.alert(`${walker.name} ${petsMessage} in ${city}`)
         } else {
             window.alert(`No walker assigned to ${pet.name}.`)
         }
@@ -68,8 +70,9 @@ mainContainer.addEventListener("click", (event) => {
 
     const cityElement = event.target.closest("li[data-city-id]")
     if (cityElement) {
+        const cityId = parseInt(cityElement.dataset.cityId)
         const cityName = cityElement.dataset.cityName
-        const cityWalkers = walkers.filter((w) => w.city === cityName)
+        const cityWalkers = walkers.filter((w) => w.cityId === cityId)
 
         if (cityWalkers.length === 0) {
             window.alert(`This city (${cityName}) is not serviced by any walkers.`)
@@ -103,7 +106,9 @@ mainContainer.addEventListener("click", (event) => {
                 ? `and is walking ${concatenatePetNames(petNames)}`
                 : "and is not walking anyone"
 
-            window.alert(`${walker.name} is currently servicing ${walker.city} ${petsMessage}`)
+            const city = getCityById(walker.cityId).name
+
+            window.alert(`${walker.name} is currently servicing ${city} ${petsMessage}`)
         } else {
             window.alert(`No walker found with ID ${walkerId}.`)
         }
