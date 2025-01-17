@@ -4,6 +4,7 @@ import { getPets, getWalkers, getCityById } from "./database.js"
 const pets = getPets()
 const walkers = getWalkers()
 
+
 // Function whose responsibility is to find the walker assigned to a pet
 const findPetWalker = (pet, allWalkers) => {
     let petWalker = null
